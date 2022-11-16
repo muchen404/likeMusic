@@ -21,7 +21,7 @@
     "express": "^4.18.2",
     "js-base64": "^3.7.2",
     "pinia": "^2.0.23",
-    "pinyin": "3.0.0-alpha.5",
+    "pinyin": "2",
     "vue": "^3.2.41",
     "vue-router": "^4.1.5",
     "vue3-lazy": "1.0.0-alpha.1",
@@ -46,6 +46,8 @@
     "sass": "^1.56.1",
     "ts-node": "^10.9.1",
     "typescript": "~4.7.4",
+    "unplugin-auto-import": "^0.11.4",
+    "unplugin-vue-components": "^0.22.9",
     "vite": "^3.1.8",
     "vitest": "^0.24.3",
     "vue-tsc": "^1.0.8"

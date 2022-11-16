@@ -2,14 +2,25 @@
   import useScroll from './use-scroll'
   import { ref } from 'vue'
 
-  const props = withDefaults(defineProps<{
+
+  export interface UseScrollOptions {
     click: boolean
-  }>(), {
-    click: true
+    probeType: number
+  }
+  export interface BSPosition {x: number, y: number}
+  export interface UseScrollEmit {
+    (e: 'scroll', pos: BSPosition): void
+  }
+
+  const props = withDefaults(defineProps<UseScrollOptions>(), {
+    click: true,
+    probeType: 0
   })
 
+  const emit = defineEmits<UseScrollEmit>()
+
   const rootRef= ref<HTMLElement | null>(null)
-  useScroll(rootRef, props)
+  useScroll(rootRef, props, emit)
 </script>
 
 <template>

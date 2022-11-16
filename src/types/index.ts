@@ -10,3 +10,17 @@ export type AlbumsItem = {
   title: string
   username: string
 }
+
+export interface Singer {
+  id: number,
+  mid: string,
+  name: string,
+  pic: string
+}
+
+export interface SingerListGroup {
+  title: string,
+  list: Singer[]
+}
+
+export type SingerFullList = SingerListGroup[]

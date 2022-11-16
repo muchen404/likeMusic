@@ -2,16 +2,18 @@ import { createApp, type ComponentPublicInstance, type ObjectDirective } from 'v
 import Loading from './Loading.vue'
 import { addClass } from '@/assets/js/dom'
 
-type LoadingInstance = ComponentPublicInstance & { setTitle?: (title: string) => void }
+type LoadingInstance =  ComponentPublicInstance<{}, {}, { title: string }, {}, {
+  setTitle: (title: string) => void
+}>
 
 export const loadingDirective: ObjectDirective = {
   mounted(el, binding) {
     const app = createApp(Loading)
-    const instance: LoadingInstance = app.mount(document.createElement('div'))
+    const instance: LoadingInstance = app.mount(document.createElement('div')) as any
     el.instance = instance
     const title = binding.arg
     if(typeof title !== 'undefined') {
-      instance.setTitle && instance.setTitle(title)
+      instance.setTitle(title)
     }
 
     if(binding.value) {
