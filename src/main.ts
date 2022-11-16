@@ -1,14 +1,22 @@
-import { createApp } from "vue";
-import { createPinia } from "pinia";
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 
-import App from "./App.vue";
-import router from "./router";
+import App from './App.vue'
+import router from './router'
+import VueLazyLoad from 'vue3-lazy'
+import LoadingImgUrl from '@/assets/images/default.png'
 
-import "@/assets/scss/index.scss";
+import { loadingDirective } from './components/base/loading/directive'
 
-const app = createApp(App);
+import '@/assets/scss/index.scss'
 
-app.use(createPinia());
-app.use(router);
+const app = createApp(App)
 
-app.mount("#app");
+app.use(createPinia())
+app.use(router)
+app.use(VueLazyLoad, {
+  loading: LoadingImgUrl
+})
+app.directive('loading', loadingDirective)
+
+app.mount('#app')

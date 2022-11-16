@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import MyHeader from "@/components/header/MyHeader.vue";
-import MyTab from "@/components/tab/MyTab.vue";
+import MyHeader from '@/components/header/MyHeader.vue'
+import MyTab from '@/components/tab/MyTab.vue'
 </script>
 
 <template>
-  <my-header></my-header>
-  <my-tab></my-tab>
-  <router-view></router-view>
+  <my-header />
+  <my-tab />
+  <router-view />
 </template>
-
-<style scoped></style>
