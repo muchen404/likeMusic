@@ -2,6 +2,7 @@
 <script setup lang="ts">
   import type { SingerFullList } from '../../types/index'
   import useFixed from './use-fixed'
+  import useShortcut from './use-shortcut'
 
   const props = withDefaults(defineProps<{
     data: SingerFullList | []
@@ -9,12 +10,26 @@
     data: () => []
   })
 
-  const { groupRef, onScroll, fixedTitle } = useFixed(props)
+  const { groupRef, onScroll, fixedTitle, fixedStyle, currentIndex } = useFixed(props)
+
+  const { 
+    shortcutList,
+    onShortcutTouchStart,
+    onShortcutTouchMove,
+    onShortcutTouchEnd,
+    scrollRef
+  } = useShortcut(props, groupRef)
 
 </script>
 
 <template>
-  <Scroll class="index-list" :click="true" :probe-type="3" @scroll="onScroll">
+  <Scroll 
+    ref="scrollRef"
+    class="index-list" 
+    :click="true" 
+    :probe-type="3"
+    @scroll="onScroll"
+  >
     <ul ref="groupRef">
       <li v-for="group in data" :key="group.title" class="group">
         <h2 class="title">
@@ -28,10 +43,28 @@
         </ul>
       </li>
     </ul>
-    <div class="fixed">
+    <div v-show="fixedTitle" :style="fixedStyle" class="fixed">
       <div class="fixed-title">
         {{ fixedTitle }}
       </div>
+    </div>
+    <div 
+      class="shortcut"
+      @touchstart.stop.prevent="onShortcutTouchStart"
+      @touchmove.stop.prevent="onShortcutTouchMove"
+      @touchend.stop.prevent="onShortcutTouchEnd"
+    >
+      <ul>
+        <li 
+          v-for="(item, index) in shortcutList" 
+          :key="item"
+          :data-index="index"
+          :class="{'current': currentIndex === index}"
+          class="item"
+        >
+          {{ item }}
+        </li>
+      </ul>
     </div>
   </Scroll>
 </template>

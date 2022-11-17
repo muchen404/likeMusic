@@ -6,17 +6,20 @@ import type { UseScrollOptions, UseScrollEmit, BSPosition } from './scroll.vue'
 
 BScroll.use(ObserveDOM)
 
+export type BScrollInstance = InstanceType<typeof BScroll> | null
+
 export default function useScroll(
   wrapperRef: Ref<HTMLElement | null>, 
   options: UseScrollOptions,
   emit: UseScrollEmit
-) {
-  const scroll = ref<InstanceType<typeof BScroll> | null>(null)
+): Ref<BScrollInstance> {
+  
+  const scroll = ref<BScrollInstance>(null)
 
   onMounted(() => {
     let scrollVal = scroll.value
     if(wrapperRef.value) {
-      scrollVal = new BScroll(wrapperRef.value, {
+      scrollVal = scroll.value = new BScroll(wrapperRef.value, {
         observeDOM: true,
         ...options
       })
@@ -32,4 +35,7 @@ export default function useScroll(
   onUnmounted(() => {
     scroll.value?.destroy()
   })
+
+  console.log('sss', scroll.value)
+  return scroll as Ref<BScrollInstance>
 }

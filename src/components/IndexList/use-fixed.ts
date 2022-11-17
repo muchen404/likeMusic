@@ -2,14 +2,24 @@ import type { SingerFullList } from '@/types/index'
 import type { BSPosition } from '../base/scroll/scroll.vue'
 
 export default function useFixed(props: { data: SingerFullList }) {
+  const TITLE_HEIGHT = 30
   const groupRef = ref<HTMLElement | null>(null)
   const listHeights = ref<number[]>([])
   const scrollY = ref<number>(0)
   const currentIndex = ref<number>(0)
+  const distance = ref<number>(0)
 
   const fixedTitle = computed(() => {
     const currentGroup = props.data[currentIndex.value]
     return currentGroup ? currentGroup.title : ''
+  })
+
+  const fixedStyle = computed(() => {
+    const distanceVal = distance.value
+    const diff = (distanceVal > 0 && distanceVal < TITLE_HEIGHT) ? distanceVal - TITLE_HEIGHT : 0
+    return {
+      transform: `translate3d(0, ${diff}px, 0)`
+    }
   })
 
   watch(() => props.data, async () => {
@@ -21,11 +31,11 @@ export default function useFixed(props: { data: SingerFullList }) {
   watch(scrollY, (newY: number) => {
     const listHeightsVal = listHeights.value
     for (let i = 0; i < listHeightsVal.length - 1; i++) {
-      // const element = listHeightsVal[i];
       const heightTop = listHeightsVal[i]
       const heightBottom = listHeightsVal[i + 1]
       if(newY > heightTop && newY <= heightBottom) {
         currentIndex.value = i
+        distance.value = heightBottom - newY
       }
     }
   })
@@ -48,5 +58,5 @@ export default function useFixed(props: { data: SingerFullList }) {
     scrollY.value = -pos.y
   }
 
-  return { groupRef, onScroll, fixedTitle }
+  return { groupRef, onScroll, fixedTitle, fixedStyle, currentIndex }
 }

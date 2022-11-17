@@ -2,7 +2,6 @@
   import useScroll from './use-scroll'
   import { ref } from 'vue'
 
-
   export interface UseScrollOptions {
     click: boolean
     probeType: number
@@ -20,7 +19,10 @@
   const emit = defineEmits<UseScrollEmit>()
 
   const rootRef= ref<HTMLElement | null>(null)
-  useScroll(rootRef, props, emit)
+  const scroll = useScroll(rootRef, props, emit)
+  defineExpose({
+    scroll
+  })
 </script>
 
 <template>

@@ -1,30 +1,16 @@
 
-<!-- <script setup lang="ts">
+<script setup lang="ts">
   import { ref } from 'vue'
   const title = ref('正在载入...')
 
   const setTitle = (value: string) => {
     title.value = value
   }
-</script> -->
-
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  export default defineComponent({
-    name: 'Loading',
-    data() {
-      return {
-        title: '正在载入...'
-      }
-    },
-    methods: {
-      setTitle(title: string) {
-        this.title = title
-      }
-    }
+  defineExpose({
+    setTitle
   })
 </script>
+
 
 <template>
   <div class="loading">
