@@ -24,3 +24,16 @@ export interface SingerListGroup {
 }
 
 export type SingerFullList = SingerListGroup[]
+
+export interface Song {
+  album:  string
+  duration:  number
+  id:  number
+  mid:  string
+  name:  string
+  pic:  string
+  singer:  string
+  url:  string
+}
+
+export interface BSPosition {x: number, y: number}

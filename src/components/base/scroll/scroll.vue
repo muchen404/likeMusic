@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import useScroll from './use-scroll'
+  import type { BSPosition } from '@/types'
   import { ref } from 'vue'
 
   export interface UseScrollOptions {
-    click: boolean
-    probeType: number
+    click?: boolean
+    probeType?: number
   }
-  export interface BSPosition {x: number, y: number}
+
+ 
   export interface UseScrollEmit {
     (e: 'scroll', pos: BSPosition): void
   }

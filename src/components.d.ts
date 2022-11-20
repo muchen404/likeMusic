@@ -9,11 +9,13 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     IndexList: typeof import('./components/IndexList/IndexList.vue')['default']
     Loading: typeof import('./components/base/loading/Loading.vue')['default']
+    MusicList: typeof import('./components/music-list/music-list.vue')['default']
     MyHeader: typeof import('./components/header/MyHeader.vue')['default']
     MyTab: typeof import('./components/tab/MyTab.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Scroll: typeof import('./components/base/scroll/scroll.vue')['default']
     Slider: typeof import('./components/base/slider/slider.vue')['default']
+    SongList: typeof import('./components/base/song-list/song-list.vue')['default']
   }
 }

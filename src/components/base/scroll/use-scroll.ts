@@ -35,7 +35,5 @@ export default function useScroll(
   onUnmounted(() => {
     scroll.value?.destroy()
   })
-
-  console.log('sss', scroll.value)
   return scroll as Ref<BScrollInstance>
 }

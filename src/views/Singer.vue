@@ -1,17 +1,35 @@
 <script setup lang="ts">
+  import storage from 'good-storage'
   import { getSingerList } from '@/service/singer'
   import type { SingerFullList } from '../types/index'
+  import type { Singer } from '@/types/index'
+  import { SINGER_KEY } from '@/assets/js/constant'
 
   const singerList = ref<SingerFullList>([])
+  const selectedSinger = ref<Singer | null>(null)
+
+  const router = useRouter()
+
+  function cacheSinger (singer: Singer) {
+    storage.session.set(SINGER_KEY, singer)
+  }
+
   getSingerList().then(result => {
-    console.log(result)
     singerList.value = result.singers
   })
+
+  function selectSinger(item: Singer) {
+    selectedSinger.value = item
+    cacheSinger(selectedSinger.value)
+    router.push({ path: `/singer/${selectedSinger.value.mid}` })
+    // router.push({ path: '/recommend' })
+  }
 </script>
 
 <template>
   <div v-loading="!singerList.length" class="singer">
-    <IndexList :data="singerList" />
+    <IndexList :data="singerList" @select="selectSinger" />
+    <router-view :singer="selectedSinger" />
   </div>
 </template>
 

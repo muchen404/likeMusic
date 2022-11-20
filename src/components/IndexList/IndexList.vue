@@ -3,6 +3,7 @@
   import type { SingerFullList } from '../../types/index'
   import useFixed from './use-fixed'
   import useShortcut from './use-shortcut'
+  import type { Singer } from '@/types/index'
 
   const props = withDefaults(defineProps<{
     data: SingerFullList | []
@@ -11,6 +12,12 @@
   })
 
   const { groupRef, onScroll, fixedTitle, fixedStyle, currentIndex } = useFixed(props)
+
+  const emit = defineEmits(['select'])
+
+  function onItemClick(item: Singer) {
+    emit('select', item)
+  }
 
   const { 
     shortcutList,
@@ -36,7 +43,12 @@
           {{ group.title }}
         </h2>
         <ul>
-          <li v-for="item in group.list" :key="item.id" class="item">
+          <li 
+            v-for="item in group.list" 
+            :key="item.id" 
+            class="item" 
+            @click="onItemClick(item)"
+          >
             <img v-lazy="item.pic" alt="头像" class="avatar">
             <span class="name">{{ item.name }}</span>
           </li>
