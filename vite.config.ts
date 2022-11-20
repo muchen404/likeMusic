@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import { join } from 'path'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 
 const resolve = (dir: string) => join(__dirname, dir)
 
@@ -11,6 +12,7 @@ const resolve = (dir: string) => join(__dirname, dir)
 export default defineConfig({
   plugins: [
     vue(),
+    VueSetupExtend(),
     Components({
       dirs: ['src/components'],
       extensions: ['vue'],

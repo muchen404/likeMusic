@@ -1,5 +1,5 @@
 
-<script setup lang="ts">
+<script setup lang="ts" name="Loading">
   import { ref } from 'vue'
   const title = ref('正在载入...')
 

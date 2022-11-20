@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     MusicList: typeof import('./components/music-list/music-list.vue')['default']
     MyHeader: typeof import('./components/header/MyHeader.vue')['default']
     MyTab: typeof import('./components/tab/MyTab.vue')['default']
+    NoResult: typeof import('./components/base/no-result/no-result.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Scroll: typeof import('./components/base/scroll/scroll.vue')['default']

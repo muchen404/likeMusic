@@ -1,46 +1,55 @@
-import { createApp, type ComponentPublicInstance, type ObjectDirective } from 'vue'
 import Loading from './Loading.vue'
-import { addClass } from '@/assets/js/dom'
+import createLoadingLikeDirective from '@/assets/js/create-loading-like-directive'
 
-// type LoadingInstance =  ComponentPublicInstance<{}, {}, { title: string }, {}, {
-//   setTitle: (title: string) => void
-// }>
+const loadingDirective = createLoadingLikeDirective(Loading)
 
-type LoadingType = InstanceType<typeof Loading>
+export default loadingDirective
 
-export const loadingDirective: ObjectDirective = {
-  mounted(el, binding) {
-    const app = createApp(Loading)
-    const instance: LoadingType = app.mount(document.createElement('div')) as any
-    el.instance = instance
-    const title = binding.arg
-    if(typeof title !== 'undefined') {
-      instance.setTitle(title)
-    }
 
-    if(binding.value) {
-      append(el)
-    }
-  },
-  updated(el, binding) {
-    if(binding.value !== binding.oldValue) {
-      binding.value ? append(el) : remove(el)
-    }
-  },
-}
 
-export type DirectiveEl = HTMLElement & {instance: ComponentPublicInstance}
+// import { createApp, type ComponentPublicInstance, type ObjectDirective } from 'vue'
+// import Loading from './Loading.vue'
+// import { addClass } from '@/assets/js/dom'
 
-const relativeCls = 'g-relative'
+// // type LoadingInstance =  ComponentPublicInstance<{}, {}, { title: string }, {}, {
+// //   setTitle: (title: string) => void
+// // }>
 
-function append (el: DirectiveEl) {
-  const style = getComputedStyle(el)
-  if(['absolute', 'fixed', 'relative'].indexOf(style.position) === -1) {
-    addClass(el, relativeCls)
-  }
-  el.appendChild(el.instance.$el)
-}
+// type LoadingType = InstanceType<typeof Loading>
 
-function remove(el: DirectiveEl) {
-  el.removeChild(el.instance.$el)
-}
+// export const loadingDirective: ObjectDirective = {
+//   mounted(el, binding) {
+//     const app = createApp(Loading)
+//     const instance: LoadingType = app.mount(document.createElement('div')) as any
+//     el.instance = instance
+//     const title = binding.arg
+//     if(typeof title !== 'undefined') {
+//       instance.setTitle(title)
+//     }
+
+//     if(binding.value) {
+//       append(el)
+//     }
+//   },
+//   updated(el, binding) {
+//     if(binding.value !== binding.oldValue) {
+//       binding.value ? append(el) : remove(el)
+//     }
+//   },
+// }
+
+// export type DirectiveEl = HTMLElement & {instance: ComponentPublicInstance}
+
+// const relativeCls = 'g-relative'
+
+// function append (el: DirectiveEl) {
+//   const style = getComputedStyle(el)
+//   if(['absolute', 'fixed', 'relative'].indexOf(style.position) === -1) {
+//     addClass(el, relativeCls)
+//   }
+//   el.appendChild(el.instance.$el)
+// }
+
+// function remove(el: DirectiveEl) {
+//   el.removeChild(el.instance.$el)
+// }

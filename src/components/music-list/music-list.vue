@@ -6,11 +6,13 @@ const props = withDefaults(defineProps<{
   songs: Song[],
   title: string,
   pic: string,
-  loading?: boolean
+  loading?: boolean,
+  noResultText?: string
 }>(), {
   songs: () => ([]),
   pic: '',
-  loading: false
+  loading: false,
+  noResultText: '抱歉，没有找到可播放的歌曲'
 })
 
 const router = useRouter()
@@ -76,6 +78,10 @@ const filterStyle = computed(() => {
   }
 })
 
+const noResult = computed(() => {
+  return !props.loading && !props.songs.length
+})
+
 onMounted(() => {
   imageHeight.value = bgImgRef.value?.clientHeight ?? 0
   maxTranslateY.value = imageHeight.value - RESERVED_HEIGHT
@@ -95,7 +101,8 @@ onMounted(() => {
       <div class="filter" :style="filterStyle" />
     </div>
     <Scroll 
-      v-loading="loading" 
+      v-loading="loading"
+      v-no-result:[noResultText]="noResult"
       class="list" 
       :style="scrollStyle"
       :click="true"

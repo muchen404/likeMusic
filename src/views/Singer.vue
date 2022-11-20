@@ -29,7 +29,11 @@
 <template>
   <div v-loading="!singerList.length" class="singer">
     <IndexList :data="singerList" @select="selectSinger" />
-    <router-view :singer="selectedSinger" />
+    <router-view v-slot="{ Component }">
+      <transition appear name="slide">
+        <component :is="Component" :singer="selectedSinger" />
+      </transition>
+    </router-view>>
   </div>
 </template>
 
