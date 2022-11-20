@@ -1,6 +1,7 @@
 
 <script setup lang="ts">
 import type { Song, BSPosition } from '@/types'
+import { usePlayerStore } from '@/stores/player'
 
 const props = withDefaults(defineProps<{
   songs: Song[],
@@ -82,6 +83,12 @@ const noResult = computed(() => {
   return !props.loading && !props.songs.length
 })
 
+
+const { selectPlay } = usePlayerStore()
+function selectItem({ song, index }: {song: Song[], index: number}) {
+  selectPlay({list: props.songs, index})
+}
+
 onMounted(() => {
   imageHeight.value = bgImgRef.value?.clientHeight ?? 0
   maxTranslateY.value = imageHeight.value - RESERVED_HEIGHT
@@ -110,7 +117,7 @@ onMounted(() => {
       @scroll="onScroll"
     >
       <div class="song-list-wrapper">
-        <song-list :songs="songs" />
+        <song-list :songs="songs" @select="selectItem" />
       </div>
     </Scroll>
   </div>

@@ -7,24 +7,27 @@ withDefaults(defineProps<{
   songs: () => ([])
 })
 
-
-function selectItem(song: Song) {
-  console.log(song)
-}
-
 function getDesc(song: Song) {
   return `${song.singer}·${song.album}`
 }
+
+const emit = defineEmits(['select'])
+function selectItem(song: Song, index: number) {
+  console.log(song)
+  emit('select', { song, index })
+}
+
+
 
 </script>
 
 <template>
   <ul class="song-list">
     <li
-      v-for="(song) in songs"
+      v-for="(song, index) in songs"
       :key="song.id"
       class="item"
-      @click="selectItem(song)"
+      @click="selectItem(song, index)"
     >
       <!-- <div class="rank" v-if="rank">
         <span :class="getRankCls(index)">{{ getRankText(index) }}</span>
