@@ -1,3 +1,4 @@
+import { shuffle } from '@/assets/js/util'
 import type { Song } from '@/types'
 
 enum PlayMode {
@@ -30,54 +31,35 @@ export const usePlayerStore = defineStore('player', () => {
     return playList.value[currentIndex.value]
   })
 
-  function setPlayingState(playState: boolean) {
-    playing.value = playState
-  }
-
-  function setSequenceList(list: []) {
+  // 设置播放
+  function selectPlay({ list, index }: {list: Song[], index: number}) {
+    playMode.value = PlayMode.sequence
     sequenceList.value = list
-  }
-
-  function setPlayList(list: []) {
     playList.value = list
-  }
-
-  function setPlayMode(mode: PlayMode) {
-    playMode.value = mode
-  }
-
-  function setCurrentIndex(index: number) {
+    playing.value = true
+    fullScreen.value = true
     currentIndex.value = index
   }
 
-  function setFullScreen(flag: boolean) {
-    fullScreen.value = flag
-  }
-
-  // 设置播放
-  function selectPlay({ list, index }: {list: Song[], index: number}) {
-    setPlayMode(PlayMode.sequence)
-    setSequenceList(list)
-    setPlayingState(true)
-    setFullScreen(true)
-    setPlayList(list)
-    setCurrentIndex(index)
+  // 随机播放
+  function randomPlay(list: Song[]) {
+    playMode.value = PlayMode.random
+    sequenceList.value = list
+    playList.value = shuffle<Song>(list)
+    playing.value = true
+    fullScreen.value = true
+    currentIndex.value = 0
   }
 
   return {
     sequenceList,
-    setSequenceList,
     playList,
-    setPlayList,
     playing,
-    setPlayingState,
     playMode,
-    setPlayMode,
     currentIndex,
-    setCurrentIndex,
     currentSong,
     fullScreen,
-    setFullScreen,
-    selectPlay
+    selectPlay,
+    randomPlay
   }
 })

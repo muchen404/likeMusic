@@ -79,14 +79,27 @@ const filterStyle = computed(() => {
   }
 })
 
+const playBtnStyle = computed(() => {
+  let display = ''
+  if (scrollY.value >= maxTranslateY.value) {
+    display = 'none'
+  }
+  return { display }
+})
+
 const noResult = computed(() => {
   return !props.loading && !props.songs.length
 })
 
 
-const { selectPlay } = usePlayerStore()
-function selectItem({ song, index }: {song: Song[], index: number}) {
+const { selectPlay, randomPlay } = usePlayerStore()
+function selectItem({ songs, index }: {songs: Song[], index: number}) {
+  console.log(songs)
   selectPlay({list: props.songs, index})
+}
+
+function random() {
+  randomPlay(props.songs)
 }
 
 onMounted(() => {
@@ -105,6 +118,14 @@ onMounted(() => {
       {{ title }}
     </h1>
     <div ref="bgImgRef" class="bg-image" :style="bgImageStyle">
+      <div class="play-btn-wrapper" :style="playBtnStyle">
+        <div v-show="songs.length > 0" class="play-btn" @click="random">
+          <i class="icon-play" />
+          <div class="text">
+            随机播放全部
+          </div>
+        </div>
+      </div>
       <div class="filter" :style="filterStyle" />
     </div>
     <Scroll 
