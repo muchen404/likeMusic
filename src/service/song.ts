@@ -20,3 +20,22 @@ export function processSongs(songs: Song[]) {
     })
   })
 }
+
+const lyricMap: Record<string, string> = {}
+export function getLyric(song: Song) {
+  if (song.lyric) {
+    return Promise.resolve(song.lyric)
+  }
+  const mid = song.mid
+  const lyric = lyricMap[mid]
+  if(lyric) {
+    return Promise.resolve(lyric)
+  }
+
+  return get('/api/getLyric', { mid })
+  .then(result => {
+    const lyric: string = result?.lyric ?? '[00:00:00]该歌曲暂时无法获取歌词'
+    lyricMap[mid] = lyric
+    return lyric
+  })
+}

@@ -65,6 +65,15 @@ export const usePlayerStore = defineStore('player', () => {
     favoriteList.value = list
   }
 
+  function addSongLyric(song: Song, lyric: string) {
+    sequenceList.value.map((item) => {
+      if (item.mid === song.mid) {
+        item.lyric = lyric
+      }
+      return lyric
+    })
+  }
+
   // 设置播放
   function selectPlay({ list, index }: {list: Song[], index: number}) {
     setPlayMode(PlayMode.sequence)
@@ -118,6 +127,7 @@ export const usePlayerStore = defineStore('player', () => {
     setPlayMode,
     setSequenceList,
     setFavoriteList,
-    favoriteList
+    favoriteList,
+    addSongLyric
   }
 })

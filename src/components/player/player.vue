@@ -4,10 +4,12 @@ import { formatTime } from '@/assets/js/util'
 import useFavorite from './use-favorite'
 import useMode from './useMode'
 import useCd from './use-cd'
+import useLyric from './use-lyric'
 
 const { modeIcon, changeMode } = useMode()
 const { getFavoriteIcon, toggleFavorite } = useFavorite()
 const { cdCls, cdRef, cdImageRef } = useCd()
+useLyric()
 
 // data
 const songReady = ref(false)
