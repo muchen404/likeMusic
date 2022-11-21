@@ -1,6 +1,13 @@
 <script setup lang="ts" name="Player">
 import { usePlayerStore } from '@/stores/player'
+import useFavorite from './use-favorite'
+import useMode from './useMode'
 // const { fullScreen, currentSong } = usePlayerStore()
+
+const { modeIcon, changeMode } = useMode()
+
+const { getFavoriteIcon, toggleFavorite } = useFavorite()
+
 const audioRef = ref<HTMLAudioElement | null>(null)
 
 const playerStore = usePlayerStore()
@@ -10,14 +17,101 @@ const isFullScreen = computed(() => {
 })
 const currentSong = computed(() => (playerStore.currentSong))
 
+// 播放状态
+const playing = computed(() => (playerStore.playing))
+const playIcon = computed(() => {
+  return playing.value ? 'icon-pause' : 'icon-play'
+})
+const currentIndex = computed(() => (playerStore.currentIndex))
+const playList = computed(() => (playerStore.playList))
+const songReady = ref(false)
+
+const disabledCls = computed(() => {
+  return songReady.value ? '' : 'disable'
+})
+
 watch(currentSong, (newSong) => {
   if (!newSong.id||!newSong.url) {
     return
   }
+  songReady.value = false
   const audioEl = audioRef.value as HTMLAudioElement
   audioEl.src = newSong.url
   audioEl.play()
 })
+
+watch(playing, (newPlaying) => {
+  if (!songReady.value) {
+    return
+  }
+  const audioEl = audioRef.value
+  newPlaying ? audioEl?.play() : audioEl?.pause()
+})
+function togglePlay() {
+  if(!songReady.value) {
+    return
+  }
+  playerStore.setPlaying(!playing.value)
+}
+
+function pause() {
+  playerStore.setPlaying(false)
+}
+
+function prev() {
+  const list = playList.value
+  if (!songReady.value || !list.length) {
+    return
+  }
+  if (list.length === 1) {
+    loop()
+  } else {
+    let index = currentIndex.value - 1
+    if (index === -1) {
+      index = list.length - 1
+    }
+    playerStore.setCurrentIndex(index)
+    if(!playing.value) {
+      playerStore.setPlaying(true)
+    }
+  }
+}
+
+function next() {
+  const list = playList.value
+  if (!songReady.value || !list.length) {
+    return
+  }
+  if (list.length === 1) {
+    loop()
+  } else {
+    let index = currentIndex.value + 1
+    if (index === list.length) {
+      index = 0
+    }
+    playerStore.setCurrentIndex(index)
+    if(!playing.value) {
+      playerStore.setPlaying(true)
+    }
+  }
+}
+
+function loop() {
+  const audioEl = audioRef.value as HTMLAudioElement
+  audioEl.currentTime = 0
+  audioEl.play()
+}
+
+function ready() {
+  if (songReady.value) {
+    return
+  }
+  songReady.value = true
+}
+
+function error() {
+  songReady.value = true
+}
 
 function goBack() {
   playerStore.setFullscreen(false)
@@ -42,7 +136,42 @@ function goBack() {
           {{ currentSong.singer }}
         </h2>
       </div>
-      <audio ref="audioRef" />
+      <div class="bottom">
+        <!-- <div class="dot-wrapper">
+          <span class="dot" :class="{'active':currentShow==='cd'}" />
+          <span class="dot" :class="{'active':currentShow==='lyric'}" />
+        </div>
+        <div class="progress-wrapper">
+          <span class="time time-l">{{ formatTime(currentTime) }}</span>
+          <div class="progress-bar-wrapper">
+            <progress-bar
+              ref="barRef"
+              :progress="progress"
+              @progress-changing="onProgressChanging"
+              @progress-changed="onProgressChanged"
+            />
+          </div>
+          <span class="time time-r">{{ formatTime(currentSong.duration) }}</span>
+        </div> -->
+        <div class="operators">
+          <div class="icon i-left">
+            <i :class="modeIcon" @click="changeMode" />
+          </div>
+          <div class="icon i-left" :class="disabledCls">
+            <i class="icon-prev" @click="prev" />
+          </div>
+          <div class="icon i-center" :class="disabledCls">
+            <i :class="playIcon" @click="togglePlay" />
+          </div>
+          <div class="icon i-right" :class="disabledCls">
+            <i class="icon-next" @click="next" />
+          </div>
+          <div class="icon i-right">
+            <i :class="getFavoriteIcon(currentSong)" @click="toggleFavorite(currentSong)" />
+          </div>
+        </div>
+      </div>
+      <audio ref="audioRef" @pause="pause" @canplay="ready" @error="error" />
     </div>
   </div>
 </template>
