@@ -1,63 +1,72 @@
 <script setup lang="ts" name="Player">
-import { usePlayerStore } from '@/stores/player'
+import { PlayMode, usePlayerStore } from '@/stores/player'
+import { formatTime } from '@/assets/js/util'
 import useFavorite from './use-favorite'
 import useMode from './useMode'
 // const { fullScreen, currentSong } = usePlayerStore()
 
 const { modeIcon, changeMode } = useMode()
-
 const { getFavoriteIcon, toggleFavorite } = useFavorite()
 
+// data
+const songReady = ref(false)
 const audioRef = ref<HTMLAudioElement | null>(null)
+const currentTime = ref(0)
+let progressChanging = false
 
+// store
 const playerStore = usePlayerStore()
-
-const isFullScreen = computed(() => {
-  return playerStore.fullScreen
-})
+const fullScreen = computed(() => (playerStore.fullScreen))
 const currentSong = computed(() => (playerStore.currentSong))
+const playing = computed(() => (playerStore.playing)) // 播放状态
+const currentIndex = computed(() => (playerStore.currentIndex))
+const playList = computed(() => (playerStore.playList))
 
-// 播放状态
-const playing = computed(() => (playerStore.playing))
 const playIcon = computed(() => {
   return playing.value ? 'icon-pause' : 'icon-play'
 })
-const currentIndex = computed(() => (playerStore.currentIndex))
-const playList = computed(() => (playerStore.playList))
-const songReady = ref(false)
-
 const disabledCls = computed(() => {
   return songReady.value ? '' : 'disable'
 })
+const progress = computed(() => (currentTime.value / currentSong.value.duration))
 
+// watch
 watch(currentSong, (newSong) => {
   if (!newSong.id||!newSong.url) {
     return
   }
+  currentTime.value = 0
   songReady.value = false
   const audioEl = audioRef.value as HTMLAudioElement
   audioEl.src = newSong.url
   audioEl.play()
 })
-
 watch(playing, (newPlaying) => {
   if (!songReady.value) {
     return
   }
   const audioEl = audioRef.value
-  newPlaying ? audioEl?.play() : audioEl?.pause()
+  if (newPlaying) {
+    audioEl?.play().then(res => {
+      console.log('play success', res)
+    }).catch(err => {
+      console.log('Dont worry! play error', err)
+    })
+  } else {
+    audioEl?.pause()
+  }
 })
+
+// 转换播放状态
 function togglePlay() {
   if(!songReady.value) {
     return
   }
   playerStore.setPlaying(!playing.value)
 }
-
 function pause() {
   playerStore.setPlaying(false)
 }
-
 function prev() {
   const list = playList.value
   if (!songReady.value || !list.length) {
@@ -76,7 +85,6 @@ function prev() {
     }
   }
 }
-
 function next() {
   const list = playList.value
   if (!songReady.value || !list.length) {
@@ -95,33 +103,57 @@ function next() {
     }
   }
 }
-
 function loop() {
   const audioEl = audioRef.value as HTMLAudioElement
   audioEl.currentTime = 0
   audioEl.play()
+  playerStore.setPlaying(true)
 }
-
+function end() {
+  currentTime.value = 0
+  if (playerStore.playMode === PlayMode.loop) {
+    loop()
+  } else {
+    next()
+  }
+}
 function ready() {
   if (songReady.value) {
     return
   }
   songReady.value = true
 }
-
 function error() {
   songReady.value = true
 }
-
 function goBack() {
   playerStore.setFullscreen(false)
+}
+// 播放器时间更新事件
+function updateTime(e: Event) {
+  if (!progressChanging) {
+    currentTime.value = (e.target as HTMLAudioElement).currentTime
+  }
+}
+// 进度条拖动中事件
+function onProgressChanging(progress: number) {
+  progressChanging = true
+  currentTime.value = currentSong.value.duration * progress
+}
+// 进度条拖动结束事件
+function onProgressChanged(progress: number) {
+  progressChanging = false
+  ;(audioRef.value as HTMLAudioElement).currentTime = currentTime.value = currentSong.value.duration * progress
+  if(!playing.value) {
+    playerStore.setPlaying(true)
+  }
 }
 
 </script>
 
 <template>
   <div class="player">
-    <div v-show="isFullScreen" class="normal-player">
+    <div v-show="fullScreen" class="normal-player">
       <div class="background">
         <img :src="currentSong.pic" alt="">
       </div>
@@ -140,10 +172,13 @@ function goBack() {
         <!-- <div class="dot-wrapper">
           <span class="dot" :class="{'active':currentShow==='cd'}" />
           <span class="dot" :class="{'active':currentShow==='lyric'}" />
-        </div>
+        </div> -->
         <div class="progress-wrapper">
           <span class="time time-l">{{ formatTime(currentTime) }}</span>
           <div class="progress-bar-wrapper">
+            <!-- :progress="progress"
+              @progress-changing="onProgressChanging"
+              @progress-changed="onProgressChanged" -->
             <progress-bar
               ref="barRef"
               :progress="progress"
@@ -152,7 +187,7 @@ function goBack() {
             />
           </div>
           <span class="time time-r">{{ formatTime(currentSong.duration) }}</span>
-        </div> -->
+        </div>
         <div class="operators">
           <div class="icon i-left">
             <i :class="modeIcon" @click="changeMode" />
@@ -171,7 +206,14 @@ function goBack() {
           </div>
         </div>
       </div>
-      <audio ref="audioRef" @pause="pause" @canplay="ready" @error="error" />
+      <audio 
+        ref="audioRef" 
+        @pause="pause" 
+        @canplay="ready" 
+        @error="error" 
+        @timeupdate="updateTime"
+        @ended="end"
+      />
     </div>
   </div>
 </template>

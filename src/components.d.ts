@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
     MyTab: typeof import('./components/tab/MyTab.vue')['default']
     NoResult: typeof import('./components/base/no-result/no-result.vue')['default']
     Player: typeof import('./components/player/player.vue')['default']
+    ProgressBar: typeof import('./components/player/ProgressBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Scroll: typeof import('./components/base/scroll/scroll.vue')['default']

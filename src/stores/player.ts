@@ -10,11 +10,6 @@ export enum PlayMode {
 } 
 
 export const usePlayerStore = defineStore('player', () => {
-  // 顺序播放列表
-  const sequenceList = ref<Song[]>([])
-
-  // 真实播放列表
-  const playList = ref<Song[]>([])
 
   // 是否正在播放
   const playing = ref(false)
@@ -27,6 +22,12 @@ export const usePlayerStore = defineStore('player', () => {
 
   // 是否全屏播放
   const fullScreen = ref(false)
+
+  // 顺序播放列表
+  const sequenceList = ref<Song[]>([])
+
+  // 真实播放列表
+  const playList = ref<Song[]>([])
 
   // 收藏列表
   const favoriteList = ref<Song[]>([])
