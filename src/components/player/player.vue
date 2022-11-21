@@ -3,10 +3,11 @@ import { PlayMode, usePlayerStore } from '@/stores/player'
 import { formatTime } from '@/assets/js/util'
 import useFavorite from './use-favorite'
 import useMode from './useMode'
-// const { fullScreen, currentSong } = usePlayerStore()
+import useCd from './use-cd'
 
 const { modeIcon, changeMode } = useMode()
 const { getFavoriteIcon, toggleFavorite } = useFavorite()
+const { cdCls, cdRef, cdImageRef } = useCd()
 
 // data
 const songReady = ref(false)
@@ -167,6 +168,15 @@ function onProgressChanged(progress: number) {
         <h2 class="subtitle">
           {{ currentSong.singer }}
         </h2>
+      </div>
+      <div class="middle">
+        <div class="middle-l">
+          <div class="cd-wrapper">
+            <div ref="cdRef" class="cd">
+              <img ref="cdImageRef" :src="currentSong.pic" :class="cdCls">
+            </div>
+          </div>
+        </div>
       </div>
       <div class="bottom">
         <!-- <div class="dot-wrapper">
