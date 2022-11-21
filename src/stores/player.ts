@@ -28,8 +28,12 @@ export const usePlayerStore = defineStore('player', () => {
 
   // 当前播放的歌曲
   const currentSong = computed(() => {
-    return playList.value[currentIndex.value]
+    return playList.value[currentIndex.value] ?? {}
   })
+
+  function setFullscreen (flag: boolean) {
+    fullScreen.value = flag
+  }
 
   // 设置播放
   function selectPlay({ list, index }: {list: Song[], index: number}) {
@@ -60,6 +64,7 @@ export const usePlayerStore = defineStore('player', () => {
     currentSong,
     fullScreen,
     selectPlay,
-    randomPlay
+    randomPlay,
+    setFullscreen
   }
 })
