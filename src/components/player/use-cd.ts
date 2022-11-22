@@ -7,7 +7,7 @@ export default function useCd() {
 
   const playerStore = usePlayerStore()
   const playing = computed(() => (playerStore.playing))
-  const cdCls = computed(() => (playing.value ? 'image playing' : 'image'))
+  const cdCls = computed(() => (playing.value ? 'playing' : ''))
 
   watch(playing, newPlaying => {
     if (!newPlaying) {

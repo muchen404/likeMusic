@@ -7,10 +7,12 @@ import useCd from './use-cd'
 import useLyric from './use-lyric'
 import useMiddleInteractive from './use-middle-interactive'
 import type { StyleValue } from 'vue'
+import type ProgressBar from './ProgressBar.vue'
 
 // data
 const songReady = ref(false)
 const audioRef = ref<HTMLAudioElement | null>(null)
+const barRef = ref<InstanceType<typeof ProgressBar> | null>(null)
 const currentTime = ref(0)
 let progressChanging = false
 
@@ -82,6 +84,12 @@ watch(playing, (newPlaying) => {
   } else {
     audioEl?.pause()
     stopLyric()
+  }
+})
+watch(fullScreen, async (newFullScreen) => {
+  if (newFullScreen) {
+    await nextTick()
+    barRef.value?.setOffset(progress.value)
   }
 })
 
@@ -188,7 +196,7 @@ function onProgressChanged(progress: number) {
 </script>
 
 <template>
-  <div class="player">
+  <div v-show="playList.length" class="player">
     <div v-show="fullScreen" class="normal-player">
       <div class="background">
         <img :src="currentSong.pic" alt="">
@@ -216,7 +224,7 @@ function onProgressChanged(progress: number) {
         >
           <div class="cd-wrapper">
             <div ref="cdRef" class="cd">
-              <img ref="cdImageRef" :src="currentSong.pic" :class="cdCls">
+              <img ref="cdImageRef" :src="currentSong.pic" :class="cdCls" class="image">
             </div>
           </div>
           <div class="playing-lyric-wrapper">
@@ -287,15 +295,16 @@ function onProgressChanged(progress: number) {
           </div>
         </div>
       </div>
-      <audio
-        ref="audioRef"
-        @pause="pause"
-        @canplay="ready"
-        @error="error"
-        @timeupdate="updateTime"
-        @ended="end"
-      />
     </div>
+    <MiniPlayer :progress="progress" :toggle-play="togglePlay" />
+    <audio
+      ref="audioRef"
+      @pause="pause"
+      @canplay="ready"
+      @error="error"
+      @timeupdate="updateTime"
+      @ended="end"
+    />
   </div>
 </template>
 

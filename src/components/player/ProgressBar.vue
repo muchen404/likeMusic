@@ -24,9 +24,7 @@
   const btnStyle = computed(() => (`transform:translate3d(${offset.value}px, 0, 0)`))
 
   watch(progress, newProgress => {
-    // 这里是progress属性状态变化才会执行，所以肯定可以拿到progressRef
-    const barWidth = (progressRef.value as HTMLElement).clientWidth - progressBtnWidth
-    offset.value = barWidth * newProgress
+    setOffset(newProgress)
   })
 
   function onTouchStart(e: TouchEvent) {
@@ -53,6 +51,15 @@
     const progress = offsetWidth / barWidth
     emit('progress-changed', progress)
   }
+  function setOffset(progress: number) {
+    // 这里是progress属性状态变化才会执行，所以肯定可以拿到progressRef
+    const barWidth = (progressRef.value as HTMLElement).clientWidth - progressBtnWidth
+    offset.value = barWidth * progress
+  }
+
+  defineExpose({
+    setOffset
+  })
 </script>
 
 <template>
