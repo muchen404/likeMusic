@@ -2,7 +2,8 @@ import BScroll from '@better-scroll/core'
 import { onMounted, onUnmounted, ref } from 'vue'
 import type { Ref } from 'vue'
 import ObserveDOM from '@better-scroll/observe-dom'
-import type { UseScrollOptions, UseScrollEmit, BSPosition } from './scroll.vue'
+import type { UseScrollOptions, UseScrollEmit } from './scroll.vue'
+import type { BSPosition } from '@/types'
 
 BScroll.use(ObserveDOM)
 
@@ -17,19 +18,17 @@ export default function useScroll(
   const scroll = ref<BScrollInstance>(null)
 
   onMounted(() => {
-    let scrollVal = scroll.value
-    if(wrapperRef.value) {
-      scrollVal = scroll.value = new BScroll(wrapperRef.value, {
-        observeDOM: true,
-        ...options
-      })
+    const scrollVal: InstanceType<typeof BScroll> = scroll.value = new BScroll(wrapperRef.value as HTMLElement, {
+      observeDOM: true,
+      ...options
+    })
 
-      if(options.probeType > 0) {
-        scrollVal.on('scroll', (pos: BSPosition) => {
-          emit('scroll', pos)
-        })
-      }
+    if((options.probeType as number) > 0) {
+      scrollVal.on('scroll', (pos: BSPosition) => {
+        emit('scroll', pos)
+      })
     }
+    // }
   })
 
   onUnmounted(() => {

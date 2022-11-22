@@ -94,7 +94,7 @@ const noResult = computed(() => {
 
 const { selectPlay, randomPlay } = usePlayerStore()
 function selectItem({ songs, index }: {songs: Song[], index: number}) {
-  console.log(songs)
+  // console.log('selectItem', songs, props.songs[index])
   selectPlay({list: props.songs, index})
 }
 

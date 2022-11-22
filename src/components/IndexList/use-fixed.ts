@@ -1,5 +1,5 @@
 import type { SingerFullList } from '@/types/index'
-import type { BSPosition } from '../base/scroll/scroll.vue'
+import type { BSPosition } from '@/types'
 
 export default function useFixed(props: { data: SingerFullList }) {
   const TITLE_HEIGHT = 30

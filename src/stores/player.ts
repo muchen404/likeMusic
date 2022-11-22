@@ -1,18 +1,15 @@
 import { shuffle } from '@/assets/js/util'
 import type { Song } from '@/types'
+import { load } from '@/assets/js/array-store'
+import { FAVORITE_KEY } from '../assets/js/constant'
 
-enum PlayMode {
+export enum PlayMode {
   sequence = 0,
   loop,
   random
 } 
 
 export const usePlayerStore = defineStore('player', () => {
-  // 顺序播放列表
-  const sequenceList = ref<Song[]>([])
-
-  // 真实播放列表
-  const playList = ref<Song[]>([])
 
   // 是否正在播放
   const playing = ref(false)
@@ -26,30 +23,94 @@ export const usePlayerStore = defineStore('player', () => {
   // 是否全屏播放
   const fullScreen = ref(false)
 
+  // 顺序播放列表
+  const sequenceList = ref<Song[]>([])
+
+  // 真实播放列表
+  const playList = ref<Song[]>([])
+
+  // 收藏列表
+  const favoriteList = ref<Song[]>([])
+
   // 当前播放的歌曲
   const currentSong = computed(() => {
-    return playList.value[currentIndex.value]
+    return playList.value[currentIndex.value] ?? {}
   })
+
+  function setPlaying(state: boolean) {
+    // console.log('set playing', state)
+    // console.trace()
+    playing.value = state
+  }
+
+  function setPlayMode(mode: PlayMode) {
+    playMode.value = mode
+  }
+
+  function setCurrentIndex(index: number) {
+    currentIndex.value = index
+  }
+
+  function setFullscreen (flag: boolean) {
+    fullScreen.value = flag
+  }
+
+  function setSequenceList(list: Song[]) {
+    sequenceList.value = list
+  }
+
+  function setPlayList(list: Song[]) {
+    playList.value = list
+  }
+
+  function setFavoriteList(list: Song[]) {
+    favoriteList.value = list
+  }
+
+  function addSongLyric(song: Song, lyric: string) {
+    sequenceList.value.map((item) => {
+      if (item.mid === song.mid) {
+        item.lyric = lyric
+      }
+      return lyric
+    })
+  }
 
   // 设置播放
   function selectPlay({ list, index }: {list: Song[], index: number}) {
-    playMode.value = PlayMode.sequence
-    sequenceList.value = list
-    playList.value = list
-    playing.value = true
-    fullScreen.value = true
-    currentIndex.value = index
+    setPlayMode(PlayMode.sequence)
+    setSequenceList(list)
+    setPlayList(list)
+    setPlaying(true)
+    setFullscreen(true)
+    setCurrentIndex(index)
   }
 
   // 随机播放
   function randomPlay(list: Song[]) {
-    playMode.value = PlayMode.random
-    sequenceList.value = list
-    playList.value = shuffle<Song>(list)
-    playing.value = true
-    fullScreen.value = true
-    currentIndex.value = 0
+    setPlayMode(PlayMode.random)
+    setSequenceList(list)
+    setPlayList(shuffle<Song>(list))
+    setPlaying(true)
+    setFullscreen(true)
+    setCurrentIndex(0)
   }
+
+  function changeMode(mode: PlayMode) {
+    const currentId = currentSong.value.id
+    if (mode === PlayMode.random) {
+      setPlayList(shuffle(sequenceList.value))
+    } else {
+      setPlayList(sequenceList.value)
+    }
+    const index = playList.value.findIndex(song => {
+      return song.id === currentId
+    })
+    setCurrentIndex(index)
+    setPlayMode(mode)
+  }
+
+  setFavoriteList(load(FAVORITE_KEY))
 
   return {
     sequenceList,
@@ -60,6 +121,15 @@ export const usePlayerStore = defineStore('player', () => {
     currentSong,
     fullScreen,
     selectPlay,
-    randomPlay
+    randomPlay,
+    setFullscreen,
+    changeMode,
+    setPlaying,
+    setCurrentIndex,
+    setPlayMode,
+    setSequenceList,
+    setFavoriteList,
+    favoriteList,
+    addSongLyric
   }
 })

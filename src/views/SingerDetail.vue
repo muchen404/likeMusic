@@ -63,7 +63,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .singer-detail {
   position: fixed;
   z-index: 10;
