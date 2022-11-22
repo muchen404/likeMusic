@@ -5,17 +5,29 @@ import useFavorite from './use-favorite'
 import useMode from './useMode'
 import useCd from './use-cd'
 import useLyric from './use-lyric'
-
-const { modeIcon, changeMode } = useMode()
-const { getFavoriteIcon, toggleFavorite } = useFavorite()
-const { cdCls, cdRef, cdImageRef } = useCd()
-useLyric()
+import useMiddleInteractive from './use-middle-interactive'
 
 // data
 const songReady = ref(false)
 const audioRef = ref<HTMLAudioElement | null>(null)
 const currentTime = ref(0)
 let progressChanging = false
+
+const { modeIcon, changeMode } = useMode()
+const { getFavoriteIcon, toggleFavorite } = useFavorite()
+const { cdCls, cdRef, cdImageRef } = useCd()
+const { 
+  currentLyric, 
+  currentLineNum, 
+  playLyric,
+  stopLyric,
+  lyricScrollRef,
+  lyricListRef,
+  pureMusicLyric,
+  playingLyric
+} = useLyric({ songReady, currentTime })
+
+const { middleRStyle } = useMiddleInteractive()
 
 // store
 const playerStore = usePlayerStore()
@@ -55,19 +67,23 @@ watch(playing, (newPlaying) => {
     }).catch(err => {
       console.log('Dont worry! play error', err)
     })
+    playLyric()
   } else {
     audioEl?.pause()
+    stopLyric()
   }
 })
 
 // 转换播放状态
 function togglePlay() {
+  console.log('toggle play')
   if(!songReady.value) {
     return
   }
   playerStore.setPlaying(!playing.value)
 }
 function pause() {
+  console.log('trigger pause')
   playerStore.setPlaying(false)
 }
 function prev() {
@@ -107,6 +123,7 @@ function next() {
   }
 }
 function loop() {
+  console.log('trigger loop')
   const audioEl = audioRef.value as HTMLAudioElement
   audioEl.currentTime = 0
   audioEl.play()
@@ -125,6 +142,7 @@ function ready() {
     return
   }
   songReady.value = true
+  playLyric()
 }
 function error() {
   songReady.value = true
@@ -142,6 +160,9 @@ function updateTime(e: Event) {
 function onProgressChanging(progress: number) {
   progressChanging = true
   currentTime.value = currentSong.value.duration * progress
+
+  playLyric()
+  stopLyric()
 }
 // 进度条拖动结束事件
 function onProgressChanged(progress: number) {
@@ -150,6 +171,7 @@ function onProgressChanged(progress: number) {
   if(!playing.value) {
     playerStore.setPlaying(true)
   }
+  playLyric()
 }
 
 </script>
@@ -178,7 +200,33 @@ function onProgressChanged(progress: number) {
               <img ref="cdImageRef" :src="currentSong.pic" :class="cdCls">
             </div>
           </div>
+          <div class="playing-lyric-wrapper">
+            <div class="playing-lyric">
+              {{ playingLyric }}
+            </div>
+          </div>
         </div>
+        <Scroll 
+          ref="lyricScrollRef" 
+          class="middle-r" 
+          :style="middleRStyle"
+        >
+          <div class="lyric-wrapper">
+            <div v-if="currentLyric" ref="lyricListRef">
+              <p
+                v-for="(line, index) in currentLyric.lines"
+                :key="line.txt"
+                :class="{'current' : currentLineNum === index}"
+                class="text"
+              >
+                {{ line.txt }}
+              </p>
+            </div>
+            <div v-show="pureMusicLyric" class="pure-music">
+              <p>{{ pureMusicLyric }}</p>
+            </div>
+          </div>
+        </Scroll>
       </div>
       <div class="bottom">
         <!-- <div class="dot-wrapper">
@@ -296,6 +344,7 @@ function onProgressChanged(progress: number) {
         font-size: 0;
         .middle-l {
           display: inline-block;
+          // display: none;
           vertical-align: top;
           position: relative;
           width: 100%;

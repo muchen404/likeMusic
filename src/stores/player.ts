@@ -38,6 +38,8 @@ export const usePlayerStore = defineStore('player', () => {
   })
 
   function setPlaying(state: boolean) {
+    // console.log('set playing', state)
+    // console.trace()
     playing.value = state
   }
 
