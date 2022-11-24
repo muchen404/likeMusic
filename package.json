@@ -1,6 +1,7 @@
 {
   "name": "vue-music-next",
   "version": "0.0.0",
+  "keywords": ["vue", "vue3", "vite", "music", "typescript"],
   "scripts": {
     "server": "nodemon backend/prod.server.js --watch backend",
     "dev": "vite",

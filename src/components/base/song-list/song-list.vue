@@ -13,11 +13,8 @@ function getDesc(song: Song) {
 
 const emit = defineEmits(['select'])
 function selectItem(song: Song, index: number) {
-  console.log(song)
   emit('select', { song, index })
 }
-
-
 
 </script>
 

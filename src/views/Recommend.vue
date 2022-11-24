@@ -12,7 +12,6 @@
   getRecommend().then(res => {
     sliders.value = res.sliders
     albums.value = res.albums
-    console.log(sliders, albums)
   })
 
   const loading = computed(() => {

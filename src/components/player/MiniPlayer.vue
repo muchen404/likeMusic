@@ -2,6 +2,7 @@
 import { usePlayerStore } from '../../stores/player'
 import useCd from './use-cd'
 import useMiniSlider from './use-mini-slider'
+import PlayList from './PlayList.vue'
 
 const props = withDefaults(defineProps<{
   progress: number,
@@ -9,6 +10,8 @@ const props = withDefaults(defineProps<{
 }>(), {
   progress: 0
 })
+
+const playListRef = ref<InstanceType<typeof PlayList> | null>(null)
 
 const playerStore = usePlayerStore()
 const currentSong = computed(() => (playerStore.currentSong))
@@ -24,6 +27,10 @@ const { sliderWrapperRef } = useMiniSlider()
 function showNormalPlayer() {
   playerStore.setFullscreen(true)
 }
+function showPlayList() {
+  (playListRef.value as InstanceType<typeof PlayList>).show()
+}
+
 </script>
 
 <template>
@@ -61,6 +68,10 @@ function showNormalPlayer() {
           <i class="icon-mini" :class="miniPlayIcon" @click.stop="togglePlay" />
         </ProgressCircle>
       </div>
+      <div class="control" @click.stop="showPlayList">
+        <i class="icon-playlist" />
+      </div>
+      <PlayList ref="playListRef" />
     </div>
   </transition>
 </template>

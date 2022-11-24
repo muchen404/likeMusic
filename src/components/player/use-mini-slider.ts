@@ -36,7 +36,6 @@ export default function useMiniSlider() {
           })
           sliderVal.on('slidePageChanged', ({ pageX }: { pageX: number }) => {
             playerStore.setCurrentIndex(pageX)
-            playerStore.setPlaying(true)
           })
         } else {
           sliderVal.refresh()
@@ -47,6 +46,11 @@ export default function useMiniSlider() {
     watch(currentIndex, (newIndex) => {
       if(sliderVal && sliderShow.value) {
         sliderVal.goToPage(newIndex, 0, 0)
+      }
+    })
+    watch(playList, (newList) => {
+      if (sliderVal && sliderShow.value && newList.length) {
+        sliderVal.refresh()
       }
     })
   })

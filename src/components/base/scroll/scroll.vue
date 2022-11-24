@@ -22,6 +22,11 @@
 
   const rootRef= ref<HTMLElement | null>(null)
   const scroll = useScroll(rootRef, props, emit)
+
+  function refresh() {
+    
+  }
+
   defineExpose({
     scroll
   })

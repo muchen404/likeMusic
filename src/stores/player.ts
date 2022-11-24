@@ -110,6 +110,44 @@ export const usePlayerStore = defineStore('player', () => {
     setPlayMode(mode)
   }
 
+  function removeSong(song: Song) {
+    const mySequenceList = sequenceList.value.slice()
+    const myPlayList = playList.value.slice()
+
+    const sequenceIndex = findIndex(mySequenceList, song)
+    const playIndex = findIndex(myPlayList, song)
+    if(sequenceIndex < 0 || playIndex < 0) {
+      return
+    }
+
+    let curIndex = currentIndex.value
+    
+    mySequenceList.splice(sequenceIndex, 1)
+    myPlayList.splice(playIndex, 1)
+
+    if(playIndex < curIndex || curIndex === myPlayList.length) {
+      curIndex --
+    }
+
+    setSequenceList(mySequenceList)
+    setPlayList(myPlayList)
+    setCurrentIndex(curIndex)
+    if (!playList.value.length) {
+      setPlaying(false)
+    }
+  }
+
+  function clearSongList() {
+    setSequenceList([])
+    setPlayList([])
+    setCurrentIndex(0)
+    setPlaying(false)
+  }
+
+  function findIndex<T extends Song>(list: T[], song: T){
+    return list.findIndex(item => (item.id === song.id))
+  }
+
   setFavoriteList(load(FAVORITE_KEY))
 
   return {
@@ -130,6 +168,8 @@ export const usePlayerStore = defineStore('player', () => {
     setSequenceList,
     setFavoriteList,
     favoriteList,
-    addSongLyric
+    addSongLyric,
+    removeSong,
+    clearSongList
   }
 })
