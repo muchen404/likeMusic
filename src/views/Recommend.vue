@@ -2,7 +2,7 @@
   import { ref, computed } from 'vue'
   import { getRecommend } from '@/service/recomment'
   import Slider from '@/components/base/slider/slider.vue'
-  import Scroll from '@/components/base/scroll/scroll.vue'
+  import WrapScroll from '@/components/WrapScroll'
   import type { SliderItem, AlbumsItem } from '@/types/index'
 
   
@@ -24,7 +24,7 @@
     v-loading="loading"
     class="recommend"
   >
-    <Scroll
+    <WrapScroll
       class="recommend-content"
       :click="true"
     >
@@ -68,7 +68,7 @@
           </ul>
         </div>
       </div>
-    </Scroll>
+    </WrapScroll>
   </div>
 </template>
 

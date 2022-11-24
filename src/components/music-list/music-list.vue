@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import type { Song, BSPosition } from '@/types'
 import { usePlayerStore } from '@/stores/player'
+import WrapScroll from '../WrapScroll'
 
 const props = withDefaults(defineProps<{
   songs: Song[],
@@ -131,7 +132,7 @@ onMounted(() => {
       </div>
       <div class="filter" :style="filterStyle" />
     </div>
-    <Scroll 
+    <WrapScroll
       v-loading="loading"
       v-no-result:[noResultText]="noResult"
       class="list" 
@@ -143,7 +144,7 @@ onMounted(() => {
       <div class="song-list-wrapper">
         <song-list :songs="songs" @select="selectItem" />
       </div>
-    </Scroll>
+    </WrapScroll>
   </div>
 </template>
 

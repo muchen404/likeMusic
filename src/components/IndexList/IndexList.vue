@@ -4,6 +4,7 @@
   import useFixed from './use-fixed'
   import useShortcut from './use-shortcut'
   import type { Singer } from '@/types/index'
+  import WrapScroll from '../WrapScroll'
 
   const props = withDefaults(defineProps<{
     data: SingerFullList | []
@@ -30,7 +31,7 @@
 </script>
 
 <template>
-  <Scroll 
+  <WrapScroll 
     ref="scrollRef"
     class="index-list" 
     :click="true" 
@@ -78,7 +79,7 @@
         </li>
       </ul>
     </div>
-  </Scroll>
+  </WrapScroll>
 </template>
 
 <style lang="scss" scoped>
