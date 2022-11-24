@@ -7,7 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Confirm: typeof import('./components/base/confirm/confirm.vue')['default']
+    Confirm: typeof import('./components/base/confirm/Confirm.vue')['default']
     IndexList: typeof import('./components/IndexList/IndexList.vue')['default']
     Loading: typeof import('./components/base/loading/Loading.vue')['default']
     MiniPlayer: typeof import('./components/player/MiniPlayer.vue')['default']
@@ -15,7 +15,7 @@ declare module '@vue/runtime-core' {
     MyHeader: typeof import('./components/header/MyHeader.vue')['default']
     MyTab: typeof import('./components/tab/MyTab.vue')['default']
     NoResult: typeof import('./components/base/no-result/no-result.vue')['default']
-    Player: typeof import('./components/player/player.vue')['default']
+    Player: typeof import('./components/player/Player.vue')['default']
     PlayList: typeof import('./components/player/PlayList.vue')['default']
     ProgressBar: typeof import('./components/player/ProgressBar.vue')['default']
     ProgressCircle: typeof import('./components/player/ProgressCircle.vue')['default']

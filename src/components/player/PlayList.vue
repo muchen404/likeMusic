@@ -126,7 +126,7 @@ defineExpose({
               >
                 <i class="current" :class="getCurrentIcon(song)" />
                 <span class="text">{{ song.name }}</span>
-                <span class="favorite" @click="toggleFavorite(song)">
+                <span class="favorite" @click.stop="toggleFavorite(song)">
                   <i :class="getFavoriteIcon(song)" />
                 </span>
                 <span

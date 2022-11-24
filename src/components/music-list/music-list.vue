@@ -16,13 +16,17 @@ const props = withDefaults(defineProps<{
   noResultText: '抱歉，没有找到可播放的歌曲'
 })
 
+const playerStore = usePlayerStore()
+
 const router = useRouter()
 const bgImgRef = ref<HTMLElement | null>(null)
 const imageHeight = ref<number>(0)
 
 const scrollStyle = computed(() => {
+  const bottom = playerStore.playList.length ? '60px' : '0'
   return {
-    top: `${imageHeight.value}px`
+    top: `${imageHeight.value}px`,
+    bottom
   }
 })
 
@@ -92,14 +96,13 @@ const noResult = computed(() => {
 })
 
 
-const { selectPlay, randomPlay } = usePlayerStore()
 function selectItem({ songs, index }: {songs: Song[], index: number}) {
   // console.log('selectItem', songs, props.songs[index])
-  selectPlay({list: props.songs, index})
+  playerStore.selectPlay({list: props.songs, index})
 }
 
 function random() {
-  randomPlay(props.songs)
+  playerStore.randomPlay(props.songs)
 }
 
 onMounted(() => {
