@@ -23,6 +23,20 @@ export interface SingerListGroup {
   list: Singer[]
 }
 
+export interface SongListItemInTopList {
+  id: number
+  singerName: string
+  songName: string
+}
+
+export interface TopListItem {
+  id: number
+  name: string
+  period: string
+  pic: string
+  songList: SongListItemInTopList[]
+}
+
 export type SingerFullList = SingerListGroup[]
 
 export interface Song {

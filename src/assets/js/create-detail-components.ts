@@ -4,10 +4,10 @@ import type { Song } from '@/types'
 import storage from 'good-storage'
 import { defineComponent } from 'vue'
 import { processSongs } from '@/service/song'
-import type { Singer, AlbumsItem } from '../../types/index'
+import type { Singer, AlbumsItem, TopListItem } from '../../types/index'
 
 
-type FnType = Partial<Singer & AlbumsItem>
+type FnType = Partial<Singer & AlbumsItem & TopListItem>
 
 export default function createDetailComponent<K extends FnType>(name: string, key: string, fetch: (info: K) => Promise<{ songs: Song[] }>) {
 
@@ -34,7 +34,7 @@ export default function createDetailComponent<K extends FnType>(name: string, ke
             ret = cached
           }
         }
-        return ret
+        return ret as K | null
       })
       const pic = computed(() => {
         const dataVal = computedData.value

@@ -2,7 +2,8 @@
 import type { Song } from '@/types'
 
 withDefaults(defineProps<{
-  songs: Song[]
+  songs: Song[],
+  rank: boolean
 }>(), {
   songs: () => ([])
 })
@@ -15,6 +16,19 @@ const emit = defineEmits(['select'])
 function selectItem(song: Song, index: number) {
   emit('select', { song, index })
 }
+function getRankText(index: number) {
+  if (index > 2) {
+    return index + 1
+  }
+}
+
+function getRankCls(index: number) {
+  if (index <= 2) {
+    return `icon icon${index}`
+  } else {
+    return 'text'
+  }
+}
 
 </script>
 
@@ -26,9 +40,9 @@ function selectItem(song: Song, index: number) {
       class="item"
       @click="selectItem(song, index)"
     >
-      <!-- <div class="rank" v-if="rank">
+      <div v-if="rank" class="rank">
         <span :class="getRankCls(index)">{{ getRankText(index) }}</span>
-      </div> -->
+      </div>
       <div class="content">
         <h2 class="name">
           {{ song.name }}

@@ -9,7 +9,8 @@ const props = withDefaults(defineProps<{
   title: string,
   pic: string,
   loading?: boolean,
-  noResultText?: string
+  noResultText?: string,
+  rank?: boolean
 }>(), {
   songs: () => ([]),
   pic: '',
@@ -142,7 +143,7 @@ onMounted(() => {
       @scroll="onScroll"
     >
       <div class="song-list-wrapper">
-        <song-list :songs="songs" @select="selectItem" />
+        <song-list :rank="rank" :songs="songs" @select="selectItem" />
       </div>
     </WrapScroll>
   </div>
