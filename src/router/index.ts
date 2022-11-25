@@ -11,9 +11,14 @@ const router = createRouter({
       redirect: '/recommend',
     },
     {
-      name: 'recommend',
       path: '/recommend',
       component: Recommend,
+      children: [
+        {
+          path: ':id',
+          component: () => import('@/views/Album.vue')
+        }
+      ]
     },
     {
       path: '/singer',

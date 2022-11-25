@@ -4,11 +4,14 @@
   import Slider from '@/components/base/slider/slider.vue'
   import WrapScroll from '@/components/WrapScroll'
   import type { SliderItem, AlbumsItem } from '@/types/index'
+  import storage from 'good-storage'
+  import { ALBUM_KEY } from '../assets/js/constant'
 
-  
+  const router = useRouter()
   
   let sliders = ref<SliderItem[]>([])
   let albums = ref<AlbumsItem[]>([])
+  const selectedAlbum = ref<AlbumsItem | null>(null)
   getRecommend().then(res => {
     sliders.value = res.sliders
     albums.value = res.albums
@@ -17,6 +20,18 @@
   const loading = computed(() => {
     return !sliders.value.length && !albums.value.length
   })
+
+  function selectItem(album: AlbumsItem) {
+    selectedAlbum.value = album
+    cacheAlbum(album)
+    router.push({
+      path: `/recommend/${album.id}`
+    })
+  }
+
+  function cacheAlbum(album: AlbumsItem) {
+    storage.session.set(ALBUM_KEY, album)
+  }
 </script>
 
 <template>
@@ -48,6 +63,7 @@
               v-for="item in albums"
               :key="item.id"
               class="item"
+              @click="selectItem(item)"
             >
               <div class="icon">
                 <img
@@ -69,6 +85,11 @@
         </div>
       </div>
     </WrapScroll>
+    <router-view v-slot="{ Component }">
+      <transition appear name="slide">
+        <component :is="Component" :data="selectedAlbum" />
+      </transition>
+    </router-view>>
   </div>
 </template>
 
