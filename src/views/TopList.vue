@@ -60,7 +60,7 @@ function selectItem(item: TopListItem) {
     </scroll>
     <router-view v-slot="{ Component }">
       <transition appear name="slide">
-        <component :is="Component" :data="selectedSinger" />
+        <component :is="Component" :data="selectedRank" />
       </transition>
     </router-view>
   </div>

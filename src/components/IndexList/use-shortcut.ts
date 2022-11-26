@@ -36,7 +36,6 @@ export default function useShortcut(
     console.log(anchorIndex)
     scrollTo(anchorIndex)
   }
-  const onShortcutTouchEnd = (e) => {}
 
   function scrollTo(index: number) {
     if (isNaN(index)) {
@@ -52,7 +51,6 @@ export default function useShortcut(
     shortcutList,
     scrollRef,
     onShortcutTouchStart,
-    onShortcutTouchMove,
-    onShortcutTouchEnd 
+    onShortcutTouchMove
   }
 }

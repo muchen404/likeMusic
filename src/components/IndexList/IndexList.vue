@@ -24,7 +24,6 @@
     shortcutList,
     onShortcutTouchStart,
     onShortcutTouchMove,
-    onShortcutTouchEnd,
     scrollRef
   } = useShortcut(props, groupRef)
 
@@ -65,7 +64,6 @@
       class="shortcut"
       @touchstart.stop.prevent="onShortcutTouchStart"
       @touchmove.stop.prevent="onShortcutTouchMove"
-      @touchend.stop.prevent="onShortcutTouchEnd"
     >
       <ul>
         <li 

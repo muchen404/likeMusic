@@ -28,7 +28,7 @@ export function save<T>(item: T, key: string, compare: any, maxLen: number) {
   return items
 }
 
-export function remove(key: string, compare: () => {}) {
+export function remove(key: string, compare: (item?: any) => {}) {
   const items = storage.get(key, [])
   deleteFromArray(items, compare)
   storage.set(key, items)
