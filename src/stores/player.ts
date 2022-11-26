@@ -144,6 +144,31 @@ export const usePlayerStore = defineStore('player', () => {
     setPlaying(false)
   }
 
+  function addSong(song: Song) {
+    let curIndex = currentIndex.value
+    const pList = playList.value.slice()
+    const sList = sequenceList.value.slice()
+    const playIndex = findIndex(pList, song)
+
+    if(playIndex > -1) {
+      curIndex = playIndex
+    } else {
+      pList.push(song)
+      curIndex = pList.length - 1
+    }
+
+    const sequenceIndex = findIndex(sList, song)
+    if(sequenceIndex === -1) {
+      sList.push(song)
+    }
+
+    setSequenceList(sList)
+    setPlayList(pList)
+    setCurrentIndex(curIndex)
+    setPlaying(true)
+    setFullscreen(true)
+  }
+
   function findIndex<T extends Song>(list: T[], song: T){
     return list.findIndex(item => (item.id === song.id))
   }
@@ -170,6 +195,7 @@ export const usePlayerStore = defineStore('player', () => {
     favoriteList,
     addSongLyric,
     removeSong,
-    clearSongList
+    clearSongList,
+    addSong
   }
 })

@@ -4,6 +4,7 @@ import Singer from '@/views/Singer.vue'
 import SingerDetail from '@/views/SingerDetail.vue'
 import TopList from '@/views/TopList.vue'
 import TopDetail from '@/views/TopDetail.vue'
+import Search from '@/views/MySearch.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,9 +44,14 @@ const router = createRouter({
       ]
     },
     {
-      name: 'search',
       path: '/search',
-      component: () => import('@/views/MySearch.vue'),
+      component: Search,
+      children: [
+        {
+          path: ':id',
+          component: SingerDetail
+        }
+      ]
     },
   ],
 })

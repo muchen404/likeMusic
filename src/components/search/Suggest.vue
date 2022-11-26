@@ -74,8 +74,14 @@ async function makeItScrollable() {
   }
 }
 
-function selectSinger(singer: Singer) {}
-function selectSong(song: Song) {}
+const emit = defineEmits(['select-song', 'select-singer'])
+
+function selectSinger(singer: Singer) {
+  emit('select-singer', singer)
+}
+function selectSong(song: Song) {
+  emit('select-song', song)
+}
 </script>
 
 <template>

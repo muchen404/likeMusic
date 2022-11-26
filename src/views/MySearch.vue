@@ -1,7 +1,15 @@
 <script lang="ts" setup name="Search">
   import { getHotKeys } from '@/service/search'
+  import { usePlayerStore } from '../stores/player'
+  import type { Song, Singer } from '@/types'
+  import storage from 'good-storage'
+  import { SINGER_KEY } from '../assets/js/constant'
   const query = ref('')
   const hotKeys = ref<{id: number, key: string}[]>([])
+  const playerStore = usePlayerStore()
+  const selectedSinger = ref< Singer | null >(null)
+
+  const router = useRouter()
 
   getHotKeys().then(result => {
     hotKeys.value = result.hotKeys
@@ -9,6 +17,20 @@
 
   function addQuery(s: string) {
     query.value = s
+  }
+
+  function selectSong(song: Song) {
+    playerStore.addSong(song)
+  }
+
+  function cachedSinger(singer: Singer) {
+    storage.session.set(SINGER_KEY, singer)
+  }
+
+  function selectSinger(singer: Singer) {
+    selectedSinger.value = singer
+    cachedSinger(singer)
+    router.push({ path: `/search/${singer.mid}` })
   }
 
 </script>
@@ -36,8 +58,17 @@
       </div>
     </div>
     <div v-show="query" class="search-result">
-      <Suggest :query="query" />
+      <Suggest 
+        :query="query" 
+        @select-song="selectSong"
+        @select-singer="selectSinger"
+      />
     </div>
+    <router-view v-slot="{ Component }">
+      <transition appear name="slide">
+        <component :is="Component" :data="selectedSinger" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
