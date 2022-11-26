@@ -10,7 +10,7 @@ export interface ServerData {
   result: any;
 }
 
-export function get(url: string, params?: any) {
+export function get<T>(url: string, params?: any):Promise<T> {
   return axios
     .get(url, { params })
     .then((res) => {

@@ -1,7 +1,13 @@
 {
   "name": "vue-music-next",
   "version": "0.0.0",
-  "keywords": ["vue", "vue3", "vite", "music", "typescript"],
+  "keywords": [
+    "vue",
+    "vue3",
+    "vite",
+    "music",
+    "typescript"
+  ],
   "scripts": {
     "server": "nodemon backend/prod.server.js --watch backend",
     "dev": "vite",
@@ -15,9 +21,11 @@
   "dependencies": {
     "@better-scroll/core": "^2.5.0",
     "@better-scroll/observe-dom": "^2.5.0",
+    "@better-scroll/pull-up": "^2.5.0",
     "@better-scroll/slide": "^2.5.0",
     "@types/create-keyframe-animation": "^0.1.0",
     "@types/good-storage": "^1.1.0",
+    "@types/throttle-debounce": "^5.0.0",
     "axios": "^1.1.3",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
@@ -28,6 +36,7 @@
     "lyric-parser": "^1.0.1",
     "pinia": "^2.0.23",
     "pinyin": "2",
+    "throttle-debounce": "^5.0.0",
     "vite-plugin-vue-setup-extend": "^0.4.0",
     "vue": "^3.2.41",
     "vue-router": "^4.1.5",

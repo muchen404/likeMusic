@@ -39,6 +39,11 @@ export interface TopListItem {
 
 export type SingerFullList = SingerListGroup[]
 
+export interface HotKey {
+  id: number
+  key: string
+}
+
 export interface Song {
   album:  string
   duration:  number

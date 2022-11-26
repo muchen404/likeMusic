@@ -6,7 +6,7 @@ export function processSongs(songs: Song[]) {
     return Promise.resolve(songs)
   }
 
-  return get('/api/getSongsUrl', {
+  return get<{map: Record<string, string>}>('/api/getSongsUrl', {
     mid: songs.map((song) => {
       return song.mid
     })
@@ -16,7 +16,7 @@ export function processSongs(songs: Song[]) {
       song.url = map[song.mid]
       return song
     }).filter((song) => {
-      return song.url.indexOf('vkey') > -1
+      return song.url && song.url.indexOf('vkey') > -1
     })
   })
 }
@@ -32,9 +32,9 @@ export function getLyric(song: Song) {
     return Promise.resolve(lyric)
   }
 
-  return get('/api/getLyric', { mid })
+  return get<{lyric: string}>('/api/getLyric', { mid })
   .then(result => {
-    const lyric: string = result?.lyric ?? '[00:00:00]该歌曲暂时无法获取歌词'
+    const lyric: string = result.lyric ?? '[00:00:00]该歌曲暂时无法获取歌词'
     lyricMap[mid] = lyric
     return lyric
   })

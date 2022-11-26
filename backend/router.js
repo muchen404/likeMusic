@@ -609,20 +609,33 @@ function registerTopDetail(app) {
 // 注册热门搜索接口
 function registerHotKeys(app) {
   app.get('/api/getHotKeys', (req, res) => {
-    const url = 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg'
+    const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
 
-    get(url, {
-      g_tk_new_20200303: token
-    }).then((response) => {
+    const data = {
+      comm: {
+        ct: 24,
+        cv: 0
+      },
+      'tencent_musicsoso_hotkey.HotkeyService.GetHotkeyForQQMusicPC': {
+        method: 'GetHotkeyForQQMusicPC',
+        module: 'tencent_musicsoso_hotkey.HotkeyService',
+        param: {
+          search_id: '',
+          uin: 0
+        }
+      }
+    }
+
+    post(url, data).then((response) => {
       const data = response.data
       if (data.code === ERR_OK) {
         res.json({
           code: ERR_OK,
           result: {
-            hotKeys: data.data.hotkey.map((key) => {
+            hotKeys: data['tencent_musicsoso_hotkey.HotkeyService.GetHotkeyForQQMusicPC'].data.vec_hotkey.map((key) => {
               return {
-                key: key.k,
-                id: key.n
+                key: key.query,
+                id: key.direct_id
               }
             }).slice(0, 10)
           }
@@ -637,7 +650,7 @@ function registerHotKeys(app) {
 // 注册搜索查询接口
 function registerSearch(app) {
   app.get('/api/search', (req, res) => {
-    const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+    const url = 'https://shc.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
 
     const { query, page, showSinger } = req.query
 

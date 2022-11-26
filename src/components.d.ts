@@ -22,7 +22,9 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Scroll: typeof import('./components/base/scroll/scroll.vue')['default']
+    SearchInput: typeof import('./components/search/SearchInput.vue')['default']
     Slider: typeof import('./components/base/slider/slider.vue')['default']
     SongList: typeof import('./components/base/song-list/song-list.vue')['default']
+    Suggest: typeof import('./components/search/Suggest.vue')['default']
   }
 }

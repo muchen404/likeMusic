@@ -1,8 +1,8 @@
 import { get } from './base'
-import type { Singer } from '@/types/index'
+import type { Singer, SingerFullList } from '@/types/index'
 
 export function getSingerList() {
-  return get('/api/getSingerList')
+  return get<{singers: SingerFullList}>('/api/getSingerList')
 }
 
 export function getSingerDetail(singer: Singer) {
