@@ -4,22 +4,44 @@
   import type { Song, Singer } from '@/types'
   import storage from 'good-storage'
   import { SINGER_KEY } from '../assets/js/constant'
+  import { useSearchStore } from '../stores/search'
+  import useSearchHistory from '../components/search/use-search-history'
+  import WrapScroll from '@/components/WrapScroll/index'
   const query = ref('')
   const hotKeys = ref<{id: number, key: string}[]>([])
   const playerStore = usePlayerStore()
+  const searchStore = useSearchStore()
   const selectedSinger = ref< Singer | null >(null)
+  const scrollRef = ref<any>(null)
+  const confirmRef = ref<any>(null)
 
   const router = useRouter()
+
+  const { saveSearch, deleteSearch, clearSearch } = useSearchHistory()
+
+  const searchHistory = computed(() => (searchStore.searchHistory))
 
   getHotKeys().then(result => {
     hotKeys.value = result.hotKeys
   })
+
+  watch(query, async newQuery => {
+    if (!newQuery) {
+      await nextTick()
+      refreshScroll()
+    }
+  })
+
+  function refreshScroll() {
+    scrollRef.value.scroll.refresh()
+  }
 
   function addQuery(s: string) {
     query.value = s
   }
 
   function selectSong(song: Song) {
+    saveSearch(query.value)
     playerStore.addSong(song)
   }
 
@@ -28,9 +50,15 @@
   }
 
   function selectSinger(singer: Singer) {
+    saveSearch(query.value)
     selectedSinger.value = singer
     cachedSinger(singer)
+
     router.push({ path: `/search/${singer.mid}` })
+  }
+
+  function showConfirm() {
+    confirmRef.value.show()
   }
 
 </script>
@@ -40,23 +68,49 @@
     <div class="search-input-wrapper">
       <SearchInput v-model="query" />
     </div>
-    <div v-show="!query" class="search-content">
-      <div class="hot-keys">
-        <h1 class="title">
-          热门搜索
-        </h1>
-        <ul>
-          <li
-            v-for="item in hotKeys"
-            :key="item.id"
-            class="item"
-            @click="addQuery(item.key)"
-          >
-            <span>{{ item.key }}</span>
-          </li>
-        </ul>
+    <WrapScroll 
+      v-show="!query"
+      ref="scrollRef" 
+      class="search-content"
+    >
+      <div>
+        <div class="hot-keys">
+          <h1 class="title">
+            热门搜索
+          </h1>
+          <ul>
+            <li
+              v-for="item in hotKeys"
+              :key="item.id"
+              class="item"
+              @click="addQuery(item.key)"
+            >
+              <span>{{ item.key }}</span>
+            </li>
+          </ul>
+        </div>
+        <div v-show="searchHistory.length" class="search-history">
+          <h1 class="title">
+            <span class="text">搜索历史</span>
+            <span class="icon" @click.stop="showConfirm">
+              <i class="icon-clear" />
+            </span>
+          </h1>
+          <Confirm 
+            ref="confirmRef" 
+            text="是否清空所有搜索历史" 
+            confirm-btn-text="清空"
+            @confirm="clearSearch"
+          />
+          <SearchList 
+            :searches="searchHistory"
+            @select="addQuery"
+            @delete="deleteSearch"
+          />
+        </div>
       </div>
-    </div>
+    </WrapScroll>
+    
     <div v-show="query" class="search-result">
       <Suggest 
         :query="query" 
