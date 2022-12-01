@@ -1,6 +1,6 @@
 <script lang="ts" setup name="Message">
   const visible = ref(false)
-  const timer = ref<number>()
+  const timer = ref<number | undefined>()
 
   const props = withDefaults(defineProps<{
     delay?: number
@@ -11,7 +11,7 @@
   function show() {
     visible.value = true
     clearTimeout(timer.value)
-    timer.value = setTimeout(() => {
+    timer.value = window.setTimeout(() => {
       hide()
     }, props.delay)
   }

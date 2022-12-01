@@ -6,7 +6,8 @@ const props = withDefaults(defineProps<{
   modelValue?: string,
   placeholder?: string
 }>(), {
-  placeholder: '搜索歌曲、歌手'
+  placeholder: '搜索歌曲、歌手',
+  modelValue: ''
 })
 const emit = defineEmits(['update:modelValue'])
 
@@ -18,6 +19,7 @@ let query = computed({
     emitInputDebounce(value)
   }
 })
+
 function emitInput (value: string) {
   emit('update:modelValue', value.trim())
 }

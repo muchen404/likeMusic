@@ -1,3 +1,28 @@
+<script lang="ts" setup name="Switches">
+const props = withDefaults(defineProps<{
+  items: string[],
+  modelValue: number
+}>(), {
+  items: () => ([]),
+  modelValue: 0
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const activeStyle = computed(() => {
+  const x = 120 * props.modelValue
+  return {
+    transform: `translate3d(${x}px, 0, 0)`
+  }
+})
+
+function switchItem(index: number) {
+  emit('update:modelValue', index)
+}
+
+
+</script>
+
 <template>
   <ul class="switches">
     <li
@@ -12,37 +37,6 @@
     <div class="active-bar" :style="activeStyle" />
   </ul>
 </template>
-
-<script>
-  export default {
-    name: 'Switches',
-    props: {
-      items: {
-        type: Array,
-        default() {
-          return []
-        }
-      },
-      modelValue: {
-        type: Number,
-        default: 0
-      }
-    },
-    computed: {
-      activeStyle() {
-        const x = 120 * this.modelValue
-        return {
-          transform: `translate3d(${x}px, 0, 0)`
-        }
-      }
-    },
-    methods: {
-      switchItem(index) {
-        this.$emit('update:modelValue', index)
-      }
-    }
-  }
-</script>
 
 <style scoped lang="scss">
   .switches {

@@ -15,7 +15,7 @@ const router = createRouter({
     },
     {
       path: '/recommend',
-      component: Recommend,
+      component: () => (import('@/views/Recommend.vue')),
       children: [
         {
           path: ':id',
@@ -25,31 +25,32 @@ const router = createRouter({
     },
     {
       path: '/singer',
-      component: Singer,
+      component: () => (import('@/views/Singer.vue')),
       children: [
         {
           path: ':id',
-          component: SingerDetail
+          component: () => (import('@/views/SingerDetail.vue'))
         }
       ]
     },
     {
       path: '/top-list',
-      component: TopList,
+      component: () => (import('@/views/TopList.vue')),
       children: [
         {
           path: ':id',
-          component: TopDetail
+          component: () => (import('@/views/TopDetail.vue'))
         }
       ]
     },
     {
       path: '/search',
-      component: Search,
+      component: () => (import('@/views/MySearch.vue')),
       children: [
         {
           path: ':id',
-          component: SingerDetail
+          // component: SingerDetail
+          component: () => (import('@/views/SingerDetail.vue'))
         }
       ]
     },
