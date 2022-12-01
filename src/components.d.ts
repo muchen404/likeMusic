@@ -7,9 +7,11 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AddSong: typeof import('./components/AddSong/AddSong.vue')['default']
     Confirm: typeof import('./components/base/confirm/Confirm.vue')['default']
     IndexList: typeof import('./components/IndexList/IndexList.vue')['default']
     Loading: typeof import('./components/base/loading/Loading.vue')['default']
+    Message: typeof import('./components/base/message/Message.vue')['default']
     MiniPlayer: typeof import('./components/player/MiniPlayer.vue')['default']
     MusicList: typeof import('./components/music-list/music-list.vue')['default']
     MyHeader: typeof import('./components/header/MyHeader.vue')['default']
@@ -27,5 +29,6 @@ declare module '@vue/runtime-core' {
     Slider: typeof import('./components/base/slider/slider.vue')['default']
     SongList: typeof import('./components/base/song-list/song-list.vue')['default']
     Suggest: typeof import('./components/search/Suggest.vue')['default']
+    Switches: typeof import('./components/base/switches/Switches.vue')['default']
   }
 }

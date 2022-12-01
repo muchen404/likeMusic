@@ -1,7 +1,7 @@
 import { shuffle } from '@/assets/js/util'
 import type { Song } from '@/types'
 import { load } from '@/assets/js/array-store'
-import { FAVORITE_KEY } from '../assets/js/constant'
+import { FAVORITE_KEY, PLAY_KEY } from '../assets/js/constant'
 
 export enum PlayMode {
   sequence = 0,
@@ -31,6 +31,8 @@ export const usePlayerStore = defineStore('player', () => {
 
   // 收藏列表
   const favoriteList = ref<Song[]>([])
+
+  const playHistory = ref<Song[]>(load(PLAY_KEY))
 
   // 当前播放的歌曲
   const currentSong = computed(() => {
@@ -144,7 +146,7 @@ export const usePlayerStore = defineStore('player', () => {
     setPlaying(false)
   }
 
-  function addSong(song: Song) {
+  function addSong(song: Song, isFullScreen = true) {
     let curIndex = currentIndex.value
     const pList = playList.value.slice()
     const sList = sequenceList.value.slice()
@@ -166,11 +168,15 @@ export const usePlayerStore = defineStore('player', () => {
     setPlayList(pList)
     setCurrentIndex(curIndex)
     setPlaying(true)
-    setFullscreen(true)
+    setFullscreen(isFullScreen)
   }
 
   function findIndex<T extends Song>(list: T[], song: T){
     return list.findIndex(item => (item.id === song.id))
+  }
+
+  function setPlayHistory(list: Song[]) {
+    playHistory.value = list
   }
 
   setFavoriteList(load(FAVORITE_KEY))
@@ -183,6 +189,8 @@ export const usePlayerStore = defineStore('player', () => {
     currentIndex,
     currentSong,
     fullScreen,
+    playHistory,
+    favoriteList,
     selectPlay,
     randomPlay,
     setFullscreen,
@@ -192,10 +200,10 @@ export const usePlayerStore = defineStore('player', () => {
     setPlayMode,
     setSequenceList,
     setFavoriteList,
-    favoriteList,
     addSongLyric,
     removeSong,
     clearSongList,
-    addSong
+    addSong,
+    setPlayHistory
   }
 })

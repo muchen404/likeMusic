@@ -1,8 +1,10 @@
 <script lang="ts" setup name="SearchList">
 const props = withDefaults(defineProps<{
-  searches?: string[]
+  searches?: string[],
+  showDelete?: boolean
 }>(), {
-  searches: () => ([])
+  searches: () => ([]),
+  showDelete: true
 })
 const emit = defineEmits(['select', 'delete'])
 
@@ -25,7 +27,7 @@ function deleteItem(item: string) {
         @click="selectItem(item)"
       >
         <span class="text">{{ item }}</span>
-        <span class="icon" @click.stop="deleteItem(item)">
+        <span v-if="showDelete" class="icon" @click.stop="deleteItem(item)">
           <i class="icon-delete" />
         </span>
       </li>

@@ -6,6 +6,7 @@ import type { Song } from '@/types/index'
 import Scroll from '@/components/base/scroll/scroll.vue'
 import { TransitionGroup, type ComponentPublicInstance } from 'vue'
 import Confirm from '../base/confirm/Confirm.vue'
+import type AddSongVue from '../AddSong/AddSong.vue'
 
 const playerStore = usePlayerStore()
 const { modeIcon, modeText, changeMode } = useMode()
@@ -18,6 +19,7 @@ const currentSong = computed(() => (playerStore.currentSong))
 const scrollRef = ref<InstanceType<typeof Scroll> | null>(null)
 const listRef = ref<ComponentPublicInstance | null>(null)
 const confirmRef = ref<InstanceType<typeof Confirm> | null>(null)
+const addSongRef = ref<InstanceType<typeof AddSongVue> | null>(null)
 const removing = ref(false)
 
 function getCurrentIcon(song: Song) {
@@ -90,7 +92,9 @@ function confirmClear() {
   hide()
 }
 
-function showAddSong() {}
+function showAddSong() {
+  addSongRef.value?.show()
+}
 
 defineExpose({
   show
@@ -154,6 +158,9 @@ defineExpose({
           text="是否清空播放列表？"
           confirm-btn-text="清空"
           @confirm="confirmClear"
+        />
+        <AddSong 
+          ref="addSongRef"
         />
       </div>
     </transition>

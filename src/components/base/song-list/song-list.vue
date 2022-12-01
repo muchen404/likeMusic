@@ -3,7 +3,7 @@ import type { Song } from '@/types'
 
 withDefaults(defineProps<{
   songs: Song[],
-  rank: boolean
+  rank?: boolean
 }>(), {
   songs: () => ([])
 })

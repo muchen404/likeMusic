@@ -9,6 +9,7 @@ import useMiddleInteractive from './use-middle-interactive'
 import type { StyleValue } from 'vue'
 import type ProgressBar from './ProgressBar.vue'
 import useAnimation from './use-animation'
+import usePlayHistory from './use-play-history'
 
 // data
 const songReady = ref(false)
@@ -47,6 +48,9 @@ const {
   leave,
   afterLeave
 } = useAnimation()
+
+
+const { savePlay } = usePlayHistory()
 
 // store
 const playerStore = usePlayerStore()
@@ -166,6 +170,7 @@ function ready() {
   }
   songReady.value = true
   playLyric()
+  savePlay(currentSong.value)
 }
 function error() {
   songReady.value = true
