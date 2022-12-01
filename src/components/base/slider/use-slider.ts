@@ -30,6 +30,15 @@ export default function useSlider(wrapperRef: Ref<HTMLElement | null>) {
     slider.value?.destroy()
   })
 
+  onActivated(() => {
+    slider.value?.enable()
+    slider.value?.refresh()
+  })
+
+  onDeactivated(() => {
+    slider.value?.disable()
+  })
+
   return {
     slider,
     currentPageIndex

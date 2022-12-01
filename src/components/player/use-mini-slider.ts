@@ -61,6 +61,15 @@ export default function useMiniSlider() {
     }
   })
 
+  onActivated(() => {
+    slider.value?.enable()
+    slider.value?.refresh()
+  })
+
+  onDeactivated(() => {
+    slider.value?.disable()
+  })
+
   return {
     slider, // TODO 推导slider类型
     sliderWrapperRef

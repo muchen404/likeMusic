@@ -34,5 +34,15 @@ export default function useScroll(
   onUnmounted(() => {
     scroll.value?.destroy()
   })
+
+  onActivated(() => {
+    scroll.value?.enable()
+    scroll.value?.refresh()
+  })
+
+  onDeactivated(() => {
+    scroll.value?.disable()
+  })
+
   return scroll as Ref<BScrollInstance>
 }

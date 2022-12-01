@@ -15,15 +15,21 @@ const viewStyle = computed(() => {
 <template>
   <my-header />
   <my-tab />
-  <router-view :style="viewStyle" />
+  <router-view v-slot="{Component}" :style="viewStyle">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
   <router-view 
     v-slot="{ Component }" 
     name="user" 
     :style="viewStyle"
   >
     <transition appear name="slide">
-      <component :is="Component" />
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
     </transition>
-  </router-view>>
+  </router-view>
   <Player />
 </template>

@@ -40,6 +40,15 @@ export default function usePullUpLoad(requestData: () => Promise<any>, preventPu
     (scroll.value as BScrollConstructor<{}>).destroy()
   })
 
+  onActivated(() => {
+    scroll.value?.enable()
+    scroll.value?.refresh()
+  })
+
+  onDeactivated(() => {
+    scroll.value?.disable()
+  })
+
 
   return {
     scroll,
