@@ -33,7 +33,6 @@ export default function useShortcut(
     touch.y2 = e.touches[0].pageY
     const delta = (touch.y2 - touch.y1) / ANCHOR_HEIGHT | 0
     const anchorIndex = touch.anchorIndex + delta
-    console.log(anchorIndex)
     scrollTo(anchorIndex)
   }
 

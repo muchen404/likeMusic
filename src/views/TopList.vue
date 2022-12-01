@@ -11,8 +11,7 @@ const router = useRouter()
 
 onMounted(async () => {
   const result = await getTopList()
-  console.log(result)
-  topList.value = result.topList
+  topList.value = (result as any).topList
   loading.value = false
 })
 

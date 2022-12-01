@@ -53,6 +53,12 @@ const router = createRouter({
         }
       ]
     },
+    {
+      path: '/user',
+      components: {
+        user: () => (import('@/views/UserCenter.vue'))
+      }
+    },
   ],
 })
 

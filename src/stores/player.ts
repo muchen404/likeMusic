@@ -32,7 +32,7 @@ export const usePlayerStore = defineStore('player', () => {
   // 收藏列表
   const favoriteList = ref<Song[]>([])
 
-  const playHistory = ref<Song[]>(load(PLAY_KEY))
+  const playHistory = ref<Song[]>([])
 
   // 当前播放的歌曲
   const currentSong = computed(() => {
@@ -179,7 +179,7 @@ export const usePlayerStore = defineStore('player', () => {
     playHistory.value = list
   }
 
-  setFavoriteList(load(FAVORITE_KEY))
+  // setFavoriteList(load(FAVORITE_KEY))
 
   return {
     sequenceList,
